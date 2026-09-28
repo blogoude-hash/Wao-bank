@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#17263A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Wao Bank">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2317263A'/%3E%3Ctext x='50' y='66' font-family='Georgia,serif' font-size='52' font-weight='600' fill='%23A52630' text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
+<title>Wao Bank — Espace client</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#17263A;
+    --navy-2:#233650;
+    --ivory:#F6F4EF;
+    --gold:#A52630;
+    --slate:#6B7686;
+    --line: rgba(23,38,58,0.12);
+    --bg: var(--ivory);
+    --fg: var(--navy);
+    --card: #ffffff;
+    padding-top: env(safe-area-inset-top,0px);
+    padding-bottom: env(safe-area-inset-bottom,0px);
+    box-sizing: border-box;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top: env(safe-area-inset-top,0px);}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{font-family:'Fraunces',Georgia,serif;}
+  a{color:inherit;}
+
+  header.nav{
+    position:sticky; top:0; z-index:10;
+    padding: 18px clamp(20px,5vw,64px) 18px;
+    padding-top: calc(18px + env(safe-area-inset-top,0px));
+    display:flex; align-items:center; justify-content:space-between;
+    background:rgba(246,244,239,0.9);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{font-family:'Fraunces',serif; font-weight:600; font-size:1.25rem; letter-spacing:0.01em;}
+  .nav-actions{display:flex; gap:10px;}
+  .btn{
+    border:1px solid var(--navy); background:transparent; color:var(--navy);
+    padding:10px 20px; border-radius:2px; font-family:'Inter'; font-size:0.92rem;
+    cursor:pointer; transition: background .18s ease, color .18s ease;
+  }
+  .btn:hover{background:var(--navy); color:var(--ivory);}
+  .btn-solid{background:var(--navy); color:var(--ivory);}
+  .btn-solid:hover{background:var(--navy-2);}
+  .btn-gold{background:var(--gold); border-color:var(--gold); color:var(--ivory);}
+  .btn-gold:hover{background:#831F27; border-color:#831F27;}
+  .btn-ghost{border-color:transparent; color:var(--slate);}
+  .btn-ghost:hover{background:transparent; color:var(--navy);}
+
+  main{max-width:1040px; margin:0 auto; padding: 0 clamp(20px,5vw,64px) 80px;}
+
+  /* Landing */
+  .hero{
+    padding: clamp(48px,10vw,110px) 0 60px;
+    display:grid; grid-template-columns: 1.1fr 0.9fr; gap:48px; align-items:center;
+  }
+  @media (max-width:760px){ .hero{grid-template-columns:1fr;} }
+  .hero h1{font-size:clamp(2.1rem,5vw,3.3rem); line-height:1.08; font-weight:500; margin:0 0 20px;}
+  .hero p{color:var(--slate); font-size:1.08rem; line-height:1.6; max-width:46ch; margin:0 0 30px;}
+  .hero-panel{
+    background:var(--navy); color:var(--ivory); border-radius:3px; padding:36px;
+    position:relative; overflow:hidden;
+  }
+  .hero-panel::before{
+    content:""; position:absolute; inset:0;
+    background: radial-gradient(circle at 80% 0%, rgba(165,38,48,0.28), transparent 55%);
+  }
+  .hero-panel .label{font-size:0.8rem; color:#E7B3B8; margin-bottom:10px; position:relative;}
+  .hero-panel .big{font-family:'Fraunces'; font-size:2.4rem; margin:0 0 6px; position:relative;}
+  .hero-panel p{color:#C7CFD9; font-size:0.95rem; margin:0; position:relative;}
+
+  .features{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line); margin-top:20px;
+  }
+  @media (max-width:760px){ .features{grid-template-columns:1fr;} }
+  .feature{background:var(--bg); padding:28px 26px;}
+  .feature .num{font-family:'Fraunces'; color:var(--gold); font-size:0.95rem; margin-bottom:12px; display:block;}
+  .feature h3{font-size:1.05rem; margin:0 0 8px; font-weight:600;}
+  .feature p{color:var(--slate); font-size:0.92rem; line-height:1.55; margin:0;}
+
+  /* Auth forms */
+  .auth-wrap{
+    max-width:420px; margin: 60px auto; background:var(--card);
+    border:1px solid var(--line); padding: 40px 36px;
+  }
+  .auth-wrap h2{font-size:1.6rem; margin:0 0 6px; font-weight:500;}
+  .auth-wrap .sub{color:var(--slate); font-size:0.92rem; margin:0 0 28px;}
+  .field{margin-bottom:18px;}
+  .field label{display:block; font-size:0.82rem; color:var(--slate); margin-bottom:6px;}
+  .field input{
+    width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:2px;
+    font-family:'Inter'; font-size:0.95rem; background:var(--bg); color:var(--fg);
+  }
+  .field input:focus{outline:2px solid var(--gold); outline-offset:1px;}
+  .auth-wrap .btn{width:100%; padding:13px; margin-top:6px;}
+  .switch-line{margin-top:20px; font-size:0.88rem; color:var(--slate); text-align:center;}
+  .switch-line button{background:none;border:none;color:var(--gold);cursor:pointer;font-size:0.88rem;padding:0;text-decoration:underline;}
+  .err{color:#B4433A; font-size:0.85rem; margin:-8px 0 14px; min-height:1em;}
+
+  /* Dashboard */
+  .dash{margin-top:40px;}
+  .dash-head{display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap; border-bottom:1px solid var(--line); padding-bottom:22px; margin-bottom:30px;}
+  .dash-head h2{margin:0 0 4px; font-size:1.8rem; font-weight:500;}
+  .dash-head p{margin:0; color:var(--slate);}
+  .dash-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line);}
+  @media (max-width:700px){ .dash-grid{grid-template-columns:1fr;} }
+  .card{background:var(--card); padding:26px;}
+  .card h3{margin:0 0 16px; font-size:0.95rem; text-transform:none; color:var(--slate); font-weight:500;}
+  .row{display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--line); font-size:0.94rem;}
+  .row:last-child{border-bottom:none;}
+  .row span:first-child{color:var(--slate);}
+  .avatar{
+    width:52px; height:52px; border-radius:50%; background:var(--navy); color:var(--gold);
+    display:flex; align-items:center; justify-content:center; font-family:'Fraunces'; font-size:1.2rem;
+  }
+  .profile-top{display:flex; gap:16px; align-items:center; margin-bottom:20px;}
+  .profile-top .name{font-weight:600; font-size:1.05rem;}
+  .profile-top .mail{color:var(--slate); font-size:0.88rem;}
+  .save-msg{font-size:0.85rem; color:#3E7A4E; min-height:1em; margin-top:8px;}
+
+  /* Banking */
+  .balance-card{
+    background:var(--navy); color:var(--ivory); padding:34px 32px; position:relative; overflow:hidden; border-radius:3px;
+  }
+  .balance-card::before{
+    content:""; position:absolute; inset:0;
+    background: radial-gradient(circle at 85% 0%, rgba(165,38,48,0.28), transparent 55%);
+  }
+  .balance-card .lbl{font-size:0.82rem; color:#B9C2CE; position:relative; margin-bottom:8px;}
+  .balance-card .amount{font-family:'Fraunces'; font-size:clamp(2.1rem,5vw,2.7rem); margin:0 0 22px; position:relative;}
+  .balance-card .amount sup{font-size:0.5em; margin-left:4px; color:#B9C2CE;}
+  .acct-row{display:flex; justify-content:space-between; align-items:center; position:relative; font-size:0.86rem; padding-top:16px; border-top:1px solid rgba(255,255,255,0.15);}
+  .acct-row .k{color:#B9C2CE;}
+  .acct-row .v{font-family:'Fraunces'; letter-spacing:0.02em;}
+  .copy-btn{background:none; border:none; color:var(--gold); font-size:0.8rem; cursor:pointer; padding:0 0 0 10px; text-decoration:underline;}
+
+  .actions-row{display:flex; gap:12px; margin:22px 0 0; flex-wrap:wrap;}
+
+  .quick-actions{
+    display:grid; grid-template-columns:repeat(6,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line); margin-top:20px;
+  }
+  @media (max-width:700px){ .quick-actions{grid-template-columns:repeat(3,1fr);} }
+  .qa{
+    background:var(--card); border:none; padding:18px 8px 16px; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    font-family:'Inter'; font-size:0.78rem; color:var(--fg);
+    transition: background .15s ease;
+  }
+  .qa:hover{background:var(--bg);}
+  .qa-ic{
+    width:38px; height:38px; border-radius:50%; background:var(--navy); color:var(--gold);
+    display:flex; align-items:center; justify-content:center; font-size:1.05rem;
+  }
+
+  .tx-list{border:1px solid var(--line);}
+  .tx{display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid var(--line); font-size:0.9rem;}
+  .tx:last-child{border-bottom:none;}
+  .tx .left{display:flex; gap:12px; align-items:center;}
+  .tx .icon{
+    width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:var(--bg); color:var(--navy); font-size:0.95rem; font-family:'Fraunces'; flex:none;
+  }
+  .tx .label{font-weight:500;}
+  .tx .date{color:var(--slate); font-size:0.8rem;}
+  .tx .amt.pos{color:#3E7A4E;}
+  .tx .amt.neg{color:#B4433A;}
+  .tx-empty{padding:24px; text-align:center; color:var(--slate); font-size:0.9rem;}
+
+  .transfer-box{margin-top:16px; padding-top:16px; border-top:1px solid var(--line);}
+  .transfer-box .field{margin-bottom:14px;}
+  .transfer-msg{font-size:0.85rem; min-height:1em; margin-top:4px;}
+
+  .hidden{display:none !important;}
+  footer{padding:30px clamp(20px,5vw,64px); text-align:center; color:var(--slate); font-size:0.82rem; border-top:1px solid var(--line);}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="brand">Wao Bank</div>
+  <div style="display:flex; gap:10px; align-items:center;">
+    <button class="btn btn-ghost hidden" id="installBtn" onclick="handleInstallClick()">Installer l'app</button>
+    <div class="nav-actions" id="navActions"></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- LANDING -->
+  <section id="view-landing">
+    <div class="hero">
+      <div>
+        <h1>Un espace client pensé pour durer.</h1>
+        <p>Créez votre compte pour suivre vos dossiers, gérer vos informations et accéder à votre espace personnel en toute simplicité.</p>
+        <div style="display:flex; gap:12px;">
+          <button class="btn btn-solid" onclick="showView('register')">Créer un compte</button>
+          <button class="btn" onclick="showView('login')">Se connecter</button>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div class="label">Espace personnel</div>
+        <p class="big">Vos données,<br>en un seul endroit.</p>
+        <p>Accès sécurisé, à tout moment, depuis votre appareil.</p>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <span class="num">01</span>
+        <h3>Inscription rapide</h3>
+        <p>Un formulaire simple pour créer votre compte en moins d'une minute.</p>
+      </div>
+      <div class="feature">
+        <span class="num">02</span>
+        <h3>Profil personnel</h3>
+        <p>Modifiez vos coordonnées et suivez l'activité de votre compte.</p>
+      </div>
+      <div class="feature">
+        <span class="num">03</span>
+        <h3>Accès sécurisé</h3>
+        <p>Reconnexion facile lors de vos prochaines visites.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGIN -->
+  <section id="view-login" class="hidden">
+    <div class="auth-wrap">
+      <h2>Se connecter</h2>
+      <p class="sub">Accédez à votre espace client.</p>
+      <div class="field">
+        <label for="li-email">Adresse e-mail</label>
+        <input id="li-email" type="email" autocomplete="email" placeholder="vous@exemple.com">
+      </div>
+      <div class="field">
+        <label for="li-pass">Mot de passe</label>
+        <input id="li-pass" type="password" autocomplete="current-password" placeholder="••••••••">
+      </div>
+      <div class="err" id="li-err"></div>
+      <button class="btn btn-solid" onclick="doLogin()">Se connecter</button>
+      <div class="switch-line">Pas encore de compte ? <button onclick="showView('register')">S'inscrire</button></div>
+    </div>
+  </section>
+
+  <!-- REGISTER -->
+  <section id="view-register" class="hidden">
+    <div class="auth-wrap">
+      <h2>Créer un compte</h2>
+      <p class="sub">Rejoignez votre espace client personnel.</p>
+      <div class="field">
+        <label for="re-name">Nom complet</label>
+        <input id="re-name" type="text" autocomplete="name" placeholder="Camille Dubois">
+      </div>
+      <div class="field">
+        <label for="re-email">Adresse e-mail</label>
+        <input id="re-email" type="email" autocomplete="email" placeholder="vous@exemple.com">
+      </div>
+      <div class="field">
+        <label for="re-pass">Mot de passe</label>
+        <input id="re-pass" type="password" autocomplete="new-password" placeholder="8 caractères minimum">
+      </div>
+      <div class="err" id="re-err"></div>
+      <button class="btn btn-solid" onclick="doRegister()">Créer mon compte</button>
+      <div class="switch-line">Déjà inscrit ? <button onclick="showView('login')">Se connecter</button></div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="view-dash" class="hidden">
+    <div class="dash">
+      <div class="dash-head">
+        <div>
+          <h2 id="dash-greeting">Bonjour</h2>
+          <p>Voici votre compte.</p>
+        </div>
+        <button class="btn btn-ghost" onclick="doLogout()">Se déconnecter</button>
+      </div>
+
+      <!-- Balance + account -->
+      <div class="balance-card">
+        <div class="lbl">Solde disponible — Compte courant</div>
+        <div class="amount" id="dash-balance">0,00<sup>€</sup></div>
+        <div class="acct-row">
+          <span class="k">Titulaire</span>
+          <span class="v" id="dash-holder">—</span>
+        </div>
+        <div class="acct-row">
+          <span class="k">Numéro de compte (IBAN)</span>
+          <span class="v" id="dash-iban">—<button class="copy-btn" onclick="copyIban()">copier</button></span>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <button class="qa" onclick="toggleTransfer(true)"><span class="qa-ic">↗</span>Virement</button>
+        <button class="qa" onclick="toggleTransfer(false)"><span class="qa-ic">↻</span>Actualiser</button>
+        <button class="qa" onclick="showStatement()"><span class="qa-ic">▤</span>Relevés</button>
+        <button class="qa" onclick="alert('Fonctionnalité à venir.')"><span class="qa-ic">▭</span>Cartes</button>
+        <button class="qa" onclick="alert('Fonctionnalité à venir.')"><span class="qa-ic">✎</span>Chéquier</button>
+        <button class="qa" onclick="alert('Fonctionnalité à venir.')"><span class="qa-ic">$</span>Payer</button>
+      </div>
+
+      <div class="card transfer-box hidden" id="transfer-panel" style="border:1px solid var(--line); margin-top:16px;">
+        <h3>Nouveau virement</h3>
+        <div class="field">
+          <label for="tr-dest">IBAN ou e-mail du bénéficiaire</label>
+          <input id="tr-dest" type="text" placeholder="FR76 2004 ... ou personne@exemple.com">
+        </div>
+        <div class="field">
+          <label for="tr-amount">Montant (€)</label>
+          <input id="tr-amount" type="number" min="0.01" step="0.01" placeholder="0,00">
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label for="tr-note">Motif (optionnel)</label>
+          <input id="tr-note" type="text" placeholder="Loyer, remboursement...">
+        </div>
+        <div class="transfer-msg" id="transfer-msg"></div>
+        <button class="btn btn-gold" style="margin-top:10px;" onclick="doTransfer()">Envoyer le virement</button>
+      </div>
+
+      <div class="dash-grid" style="margin-top:30px;">
+        <div class="card">
+          <h3>Dernières transactions</h3>
+          <div class="tx-list" id="tx-list"></div>
+        </div>
+
+        <div class="card">
+          <h3>Profil</h3>
+          <div class="profile-top">
+            <div class="avatar" id="dash-avatar">?</div>
+            <div>
+              <div class="name" id="dash-name">—</div>
+              <div class="mail" id="dash-email">—</div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="ed-name">Nom complet</label>
+            <input id="ed-name" type="text">
+          </div>
+          <div class="field" style="margin-bottom:0;">
+            <label for="ed-phone">Téléphone (optionnel)</label>
+            <input id="ed-phone" type="tel" placeholder="06 12 34 56 78">
+          </div>
+          <div class="save-msg" id="save-msg"></div>
+          <button class="btn btn-gold" style="margin-top:10px;" onclick="saveProfile()">Enregistrer</button>
+          <div class="row" style="margin-top:18px;"><span>Membre depuis</span><span id="dash-since">—</span></div>
+          <div class="row"><span>Dernière connexion</span><span id="dash-last">—</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section id="view-statement" class="hidden">
+    <div class="dash">
+      <div class="dash-head">
+        <div>
+          <h2>Relevé de compte</h2>
+          <p>Historique complet de vos transactions.</p>
+        </div>
+        <button class="btn btn-ghost" onclick="showView('dash')">← Retour</button>
+      </div>
+      <div class="tx-list" id="statement-list"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Insufficient balance modal -->
+<div class="hidden" id="insufficientModal" style="position:fixed; inset:0; background:rgba(23,38,58,0.6); z-index:60; display:flex; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:var(--card); width:100%; max-width:380px; padding:32px 30px; border-radius:6px; text-align:center;">
+    <div style="width:52px; height:52px; border-radius:50%; background:#F6E4E5; color:#B4433A; display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin:0 auto 16px;">!</div>
+    <div style="font-family:'Fraunces'; font-size:1.15rem; margin-bottom:8px;">Solde insuffisant</div>
+    <p style="color:var(--slate); font-size:0.9rem; line-height:1.55; margin:0 0 22px;" id="insufficient-detail">
+      Le montant du virement dépasse votre solde disponible.
+    </p>
+    <button class="btn btn-solid" style="width:100%;" onclick="document.getElementById('insufficientModal').classList.add('hidden')">Compris</button>
+  </div>
+</div>
+
+<!-- Transfer loading modal -->
+<div class="hidden" id="transferLoadingModal" style="position:fixed; inset:0; background:rgba(23,38,58,0.6); z-index:60; display:flex; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:var(--card); width:100%; max-width:380px; padding:34px 30px; border-radius:6px; text-align:center;">
+    <div style="font-family:'Fraunces'; font-size:1.15rem; margin-bottom:6px;">Virement en cours</div>
+    <p style="color:var(--slate); font-size:0.86rem; margin:0 0 24px;">Veuillez patienter, ne fermez pas cette fenêtre.</p>
+    <div style="height:8px; background:var(--line); border-radius:4px; overflow:hidden; margin-bottom:14px;">
+      <div id="tl-bar" style="height:100%; width:0%; background:var(--gold); transition:width .15s linear;"></div>
+    </div>
+    <div id="tl-pct" style="font-family:'Fraunces'; font-size:1.3rem; color:var(--navy);">0%</div>
+  </div>
+</div>
+
+<!-- iOS install instructions -->
+<div class="hidden" id="iosModal" style="position:fixed; inset:0; background:rgba(23,38,58,0.55); z-index:50; display:flex; align-items:flex-end; justify-content:center;">
+  <div style="background:var(--card); width:100%; max-width:480px; padding:28px 26px calc(28px + env(safe-area-inset-bottom,0px)); border-radius:8px 8px 0 0;">
+    <h3 style="margin:0 0 12px; font-family:'Fraunces'; font-weight:500;">Installer sur iPhone</h3>
+    <p style="color:var(--slate); font-size:0.92rem; line-height:1.6; margin:0 0 16px;">
+      1. Touchez l'icône <strong>Partager</strong> en bas de Safari (le carré avec une flèche).<br>
+      2. Faites défiler puis touchez <strong>Sur l'écran d'accueil</strong>.<br>
+      3. Touchez <strong>Ajouter</strong>.
+    </p>
+    <button class="btn btn-solid" style="width:100%;" onclick="document.getElementById('iosModal').classList.add('hidden')">Compris</button>
+  </div>
+</div>
+
+<footer>Wao Bank — Démonstration d'espace client. Les données sont stockées localement dans ce navigateur.</footer>
+
+<script>
+  // ---- PWA installability ----
+  (function setupManifest(){
+    const manifest = {
+      name: "Wao Bank",
+      short_name: "Wao Bank",
+      start_url: ".",
+      display: "standalone",
+      background_color: "#F6F4EF",
+      theme_color: "#17263A",
+      icons: [
+        { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2317263A'/%3E%3Ctext x='50' y='66' font-family='Georgia,serif' font-size='52' font-weight='600' fill='%23A52630' text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E", sizes: "any", type: "image/svg+xml" }
+      ]
+    };
+    try{
+      const blob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
+      const link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = URL.createObjectURL(blob);
+      document.head.appendChild(link);
+    }catch(e){}
+  })();
+
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e)=>{
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('installBtn').classList.remove('hidden');
+  });
+  window.addEventListener('appinstalled', ()=>{
+    document.getElementById('installBtn').classList.add('hidden');
+    deferredPrompt = null;
+  });
+
+  function isIos(){
+    return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+  }
+  function isStandalone(){
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+
+  async function handleInstallClick(){
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      document.getElementById('installBtn').classList.add('hidden');
+    } else if(isIos()){
+      document.getElementById('iosModal').classList.remove('hidden');
+    }
+  }
+
+  (function showInstallEntryForIos(){
+    if(isIos() && !isStandalone()){
+      document.getElementById('installBtn').classList.remove('hidden');
+    }
+  })();
+
+  const STORE_KEY = 'waobank_users';
+  const SESSION_KEY = 'waobank_session';
+
+  function loadUsers(){
+    try{ return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function saveUsers(u){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(u)); }catch(e){}
+  }
+  function getSession(){
+    try{ return localStorage.getItem(SESSION_KEY); }catch(e){ return null; }
+  }
+  function setSession(email){
+    try{ localStorage.setItem(SESSION_KEY, email); }catch(e){}
+  }
+  function clearSession(){
+    try{ localStorage.removeItem(SESSION_KEY); }catch(e){}
+  }
+
+  // very light obfuscation only — NOT real security. A production site needs a real backend.
+  function hash(str){
+    let h = 0;
+    for(let i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i)) >>> 0; }
+    return h.toString(16);
+  }
+
+  function showView(name){
+    ['landing','login','register','dash','statement'].forEach(v=>{
+      document.getElementById('view-'+v).classList.toggle('hidden', v!==name);
+    });
+    document.getElementById('li-err').textContent='';
+    document.getElementById('re-err').textContent='';
+    renderNav();
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+
+  function renderNav(){
+    const nav = document.getElementById('navActions');
+    const session = getSession();
+    if(session){
+      nav.innerHTML = '<button class="btn btn-solid" onclick="showView(\'dash\')">Mon compte</button>';
+    } else {
+      nav.innerHTML = '<button class="btn btn-ghost" onclick="showView(\'login\')">Connexion</button><button class="btn btn-solid" onclick="showView(\'register\')">Inscription</button>';
+    }
+  }
+
+  function doRegister(){
+    const name = document.getElementById('re-name').value.trim();
+    const email = document.getElementById('re-email').value.trim().toLowerCase();
+    const pass = document.getElementById('re-pass').value;
+    const err = document.getElementById('re-err');
+    err.textContent='';
+    if(!name || !email || !pass){ err.textContent='Veuillez remplir tous les champs.'; return; }
+    if(pass.length < 8){ err.textContent='Le mot de passe doit contenir au moins 8 caractères.'; return; }
+    const users = loadUsers();
+    if(users[email]){ err.textContent='Un compte existe déjà avec cet e-mail.'; return; }
+    users[email] = {
+      name, email, passHash: hash(pass),
+      phone:'', createdAt: new Date().toISOString(), lastLogin: new Date().toISOString(),
+      iban: generateIban(),
+      balance: 1500,
+      transactions: [
+        { id: cryptoId(), date: new Date().toISOString(), label:'Dépôt de bienvenue', amount: 1500, type:'in' }
+      ]
+    };
+    saveUsers(users);
+    setSession(email);
+    enterDashboard(email);
+  }
+
+  function cryptoId(){
+    return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+  }
+
+  function generateIban(){
+    let digits = '';
+    for(let i=0;i<20;i++){ digits += Math.floor(Math.random()*10); }
+    return 'FR76 ' + digits.match(/.{1,4}/g).join(' ');
+  }
+
+  function normIban(s){
+    return (s||'').replace(/\s+/g,'').toUpperCase();
+  }
+
+  function formatEUR(n){
+    return n.toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+
+  function doLogin(){
+    const email = document.getElementById('li-email').value.trim().toLowerCase();
+    const pass = document.getElementById('li-pass').value;
+    const err = document.getElementById('li-err');
+    err.textContent='';
+    const users = loadUsers();
+    const u = users[email];
+    if(!u || u.passHash !== hash(pass)){ err.textContent='E-mail ou mot de passe incorrect.'; return; }
+    u.lastLogin = new Date().toISOString();
+    users[email] = u;
+    saveUsers(users);
+    setSession(email);
+    enterDashboard(email);
+  }
+
+  function doLogout(){
+    clearSession();
+    showView('landing');
+  }
+
+  function enterDashboard(email){
+    const users = loadUsers();
+    let u = users[email];
+    if(!u){ showView('landing'); return; }
+    // backfill accounts created before banking features existed
+    let changed = false;
+    if(!u.iban){ u.iban = generateIban(); changed = true; }
+    if(typeof u.balance !== 'number'){ u.balance = 1500; changed = true; }
+    if(!Array.isArray(u.transactions)){
+      u.transactions = [{ id: cryptoId(), date: new Date().toISOString(), label:'Dépôt de bienvenue', amount: 1500, type:'in' }];
+      changed = true;
+    }
+    if(changed){ users[email] = u; saveUsers(users); }
+
+    document.getElementById('dash-greeting').textContent = 'Bonjour, ' + u.name.split(' ')[0];
+    document.getElementById('dash-name').textContent = u.name;
+    document.getElementById('dash-email').textContent = u.email;
+    document.getElementById('dash-avatar').textContent = u.name.trim().charAt(0).toUpperCase();
+    document.getElementById('dash-since').textContent = new Date(u.createdAt).toLocaleDateString('fr-FR');
+    document.getElementById('dash-last').textContent = new Date(u.lastLogin).toLocaleDateString('fr-FR');
+    document.getElementById('ed-name').value = u.name;
+    document.getElementById('ed-phone').value = u.phone || '';
+    document.getElementById('save-msg').textContent = '';
+
+    document.getElementById('dash-holder').textContent = u.name;
+    document.getElementById('dash-iban').innerHTML = u.iban + '<button class="copy-btn" onclick="copyIban()">copier</button>';
+    document.getElementById('dash-balance').innerHTML = formatEUR(u.balance) + '<sup>€</sup>';
+    document.getElementById('transfer-panel').classList.add('hidden');
+    document.getElementById('transfer-msg').textContent = '';
+    document.getElementById('tr-dest').value = '';
+    document.getElementById('tr-amount').value = '';
+    document.getElementById('tr-note').value = '';
+
+    renderTransactions(u);
+    showView('dash');
+  }
+
+  function renderTransactions(u){
+    const list = document.getElementById('tx-list');
+    const txs = (u.transactions || []).slice().sort((a,b)=> new Date(b.date)-new Date(a.date));
+    if(txs.length === 0){
+      list.innerHTML = '<div class="tx-empty">Aucune transaction pour le moment.</div>';
+      return;
+    }
+    list.innerHTML = txs.map(t=>{
+      const isPos = t.type === 'in';
+      const icon = isPos ? '↓' : '↑';
+      const d = new Date(t.date).toLocaleDateString('fr-FR', {day:'2-digit', month:'short', year:'numeric'});
+      return `<div class="tx">
+        <div class="left">
+          <div class="icon">${icon}</div>
+          <div>
+            <div class="label">${escapeHtml(t.label)}</div>
+            <div class="date">${d}</div>
+          </div>
+        </div>
+        <div class="amt ${isPos ? 'pos':'neg'}">${isPos?'+':'-'}${formatEUR(Math.abs(t.amount))} €</div>
+      </div>`;
+    }).join('');
+  }
+
+  function escapeHtml(s){
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function showStatement(){
+    const email = getSession();
+    if(!email) return;
+    const users = loadUsers();
+    const u = users[email];
+    if(!u) return;
+    renderStatement(u);
+    showView('statement');
+  }
+
+  function renderStatement(u){
+    const list = document.getElementById('statement-list');
+    const txs = (u.transactions || []).slice().sort((a,b)=> new Date(b.date)-new Date(a.date));
+    if(txs.length === 0){
+      list.innerHTML = '<div class="tx-empty">Aucune transaction pour le moment.</div>';
+      return;
+    }
+    list.innerHTML = txs.map(t=>{
+      const isPos = t.type === 'in';
+      const icon = isPos ? '↓' : '↑';
+      const dt = new Date(t.date);
+      const d = dt.toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'});
+      const h = dt.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+      return `<div class="tx">
+        <div class="left">
+          <div class="icon">${icon}</div>
+          <div>
+            <div class="label">${escapeHtml(t.label)}</div>
+            <div class="date">${d} à ${h}</div>
+          </div>
+        </div>
+        <div class="amt ${isPos ? 'pos':'neg'}">${isPos?'+':'-'}${formatEUR(Math.abs(t.amount))} €</div>
+      </div>`;
+    }).join('');
+  }
+
+  function toggleTransfer(show){
+    const panel = document.getElementById('transfer-panel');
+    if(show === true){ panel.classList.remove('hidden'); }
+    else if(show === false && !panel.classList.contains('hidden')){
+      // "Actualiser" while open just refreshes data
+      enterDashboard(getSession());
+    } else {
+      panel.classList.toggle('hidden');
+    }
+  }
+
+  function copyIban(){
+    const email = getSession();
+    if(!email) return;
+    const u = loadUsers()[email];
+    if(!u) return;
+    const txt = u.iban;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).catch(()=>{});
+    }
+  }
+
+  function doTransfer(){
+    const email = getSession();
+    if(!email) return;
+    const users = loadUsers();
+    const sender = users[email];
+    const msg = document.getElementById('transfer-msg');
+    msg.textContent = '';
+
+    const destRaw = document.getElementById('tr-dest').value.trim();
+    const amount = parseFloat(document.getElementById('tr-amount').value);
+    const note = document.getElementById('tr-note').value.trim();
+
+    if(!destRaw){ msg.style.color='#B4433A'; msg.textContent='Indiquez un IBAN ou un e-mail.'; return; }
+    if(!amount || amount <= 0){ msg.style.color='#B4433A'; msg.textContent='Indiquez un montant valide.'; return; }
+    if(amount > sender.balance){
+      msg.style.color='#B4433A';
+      msg.textContent='Solde insuffisant.';
+      document.getElementById('insufficient-detail').textContent =
+        'Vous tentez de transférer ' + formatEUR(amount) + ' € mais votre solde disponible est de ' + formatEUR(sender.balance) + ' €.';
+      document.getElementById('insufficientModal').classList.remove('hidden');
+      return;
+    }
+
+    runTransferLoading(function(){
+      executeTransfer(email, destRaw, amount, note);
+    });
+  }
+
+  function runTransferLoading(onDone){
+    const modal = document.getElementById('transferLoadingModal');
+    const bar = document.getElementById('tl-bar');
+    const pct = document.getElementById('tl-pct');
+    bar.style.width = '0%';
+    pct.textContent = '0%';
+    modal.classList.remove('hidden');
+
+    const duration = 15000 + Math.random() * 5000; // 15 to 20 seconds
+    const start = performance.now();
+
+    function tick(now){
+      const elapsed = now - start;
+      let p = Math.min(100, Math.round((elapsed / duration) * 100));
+      bar.style.width = p + '%';
+      pct.textContent = p + '%';
+      if(elapsed < duration){
+        requestAnimationFrame(tick);
+      } else {
+        bar.style.width = '100%';
+        pct.textContent = '100%';
+        setTimeout(function(){
+          modal.classList.add('hidden');
+          onDone();
+        }, 400);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function executeTransfer(email, destRaw, amount, note){
+    const users = loadUsers();
+    const sender = users[email];
+    const msg = document.getElementById('transfer-msg');
+
+    // find recipient: by email or by IBAN among known users
+    let recipientEmail = null;
+    const destLower = destRaw.toLowerCase();
+    if(users[destLower] && destLower !== email){
+      recipientEmail = destLower;
+    } else {
+      const destIban = normIban(destRaw);
+      for(const k in users){
+        if(k !== email && normIban(users[k].iban) === destIban){ recipientEmail = k; break; }
+      }
+    }
+
+    const label = note || (recipientEmail ? ('Virement à ' + users[recipientEmail].name) : ('Virement vers ' + destRaw));
+
+    sender.balance = +(sender.balance - amount).toFixed(2);
+    sender.transactions.push({ id: cryptoId(), date: new Date().toISOString(), label, amount, type:'out' });
+
+    if(recipientEmail){
+      const recipient = users[recipientEmail];
+      recipient.balance = +(recipient.balance + amount).toFixed(2);
+      recipient.transactions.push({ id: cryptoId(), date: new Date().toISOString(), label: note || ('Virement de ' + sender.name), amount, type:'in' });
+      users[recipientEmail] = recipient;
+    }
+
+    users[email] = sender;
+    saveUsers(users);
+
+    msg.style.color = '#3E7A4E';
+    msg.textContent = recipientEmail
+      ? 'Virement envoyé à ' + users[recipientEmail].name + '.'
+      : 'Virement envoyé (bénéficiaire externe simulé).';
+
+    document.getElementById('dash-balance').innerHTML = formatEUR(sender.balance) + '<sup>€</sup>';
+    renderTransactions(sender);
+    document.getElementById('tr-dest').value = '';
+    document.getElementById('tr-amount').value = '';
+    document.getElementById('tr-note').value = '';
+  }
+
+  function saveProfile(){
+    const email = getSession();
+    if(!email) return;
+    const users = loadUsers();
+    const u = users[email];
+    const newName = document.getElementById('ed-name').value.trim();
+    if(!newName){ document.getElementById('save-msg').style.color='#B4433A'; document.getElementById('save-msg').textContent='Le nom ne peut pas être vide.'; return; }
+    u.name = newName;
+    u.phone = document.getElementById('ed-phone').value.trim();
+    users[email] = u;
+    saveUsers(users);
+    document.getElementById('save-msg').style.color = '#3E7A4E';
+    document.getElementById('save-msg').textContent = 'Profil enregistré.';
+    document.getElementById('dash-greeting').textContent = 'Bonjour, ' + u.name.split(' ')[0];
+    document.getElementById('dash-name').textContent = u.name;
+    document.getElementById('dash-avatar').textContent = u.name.trim().charAt(0).toUpperCase();
+  }
+
+  // init
+  (function init(){
+    const session = getSession();
+    renderNav();
+    if(session){ enterDashboard(session); }
+    else { showView('landing'); }
+  })();
+</script>
+
+</body>
+</html>
